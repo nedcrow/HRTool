@@ -154,17 +154,6 @@ namespace HRTool
     {
         public class FindGameobject
         {
-            public static bool FindChild(GameObject parent, string childName) {
-                int childCount = parent.transform.GetChildCount();
-                if (childCount != 0) {
-                    for(int i=0; i< childCount; i++)
-                    {
-                        if(parent.transform.GetChild(i).name == childName) { return true; }
-                    }
-                }
-                return false;
-            }//자식 Gameobject가 있으면 true반환.
-
             public static GameObject GetChild(GameObject parent, string childName)
             {
                 int childCount = parent.transform.GetChildCount();
