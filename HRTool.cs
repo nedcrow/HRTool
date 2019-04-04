@@ -439,32 +439,36 @@ namespace HRTool
             /// <returns></returns>
             public static object[] Conveyor(object[] objs, int moveCount)
             {
+                Type t = objs.GetType();
                 if (objs != null)
                 {
-                    object[] objects = new object[objs.Length];
+                    object[] objects = objs;
                     int turningPoint = objs.Length - Math.Abs(moveCount);
                     if (moveCount > 0)
                     {
                         for (int i = 0; i < turningPoint; i++)
                         {
-                            objects[i] = objs[i + moveCount]; //당겨진 object
+                            objects[i] = ChangeObj_NullPossiable(objs[i + moveCount]); //당겨진 object
+
                             if (i < moveCount)
                             {
-                                objects[turningPoint + i] = objs[i]; //미뤄진 object
+                                objects[turningPoint + i] = ChangeObj_NullPossiable(objs[i]); //미뤄진 object
                             }
                         }
                     }//moveCount만큼 당김.
                     else
                     {
+                        moveCount = moveCount * -1;
                         for (int i = 0; i < turningPoint; i++)
                         {
-                            objects[moveCount + i] = objs[i]; //당겨진 object
+                            objects[moveCount + i] = ChangeObj_NullPossiable(objs[i]); //당겨진 object
+
                             if (i < moveCount)
                             {
-                                objects[i] = objs[turningPoint + i]; //미뤄진 object
+                                objects[i] = ChangeObj_NullPossiable(objs[turningPoint + i]); //미뤄진 object
                             }
                         }
-                    }//moveCount만큼 밀어냄.
+                    }//moveCount만큼 밀어냄.            
                     return objects;
                 }
                 else
@@ -474,6 +478,14 @@ namespace HRTool
                 }
             }
             #endregion
+
+            static object ChangeObj_NullPossiable(object obj) {
+                if(obj == null)
+                {
+                    return null;
+                }
+                return obj;
+            }
         }
     }
 }
