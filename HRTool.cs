@@ -50,7 +50,7 @@ namespace HRTool
                 object data=null;
                 try
                 {                    
-                    FileInfo fi = new FileInfo(path + "/"+ fileName);
+                    FileInfo fi = new FileInfo(path + "/"+ fileName); Debug.Log(fi);
                     if (fi.Exists)
                     {
                         BinaryFormatter bf = new BinaryFormatter();
@@ -426,11 +426,24 @@ namespace HRTool
                 return false;
             }
             #endregion
+
+            public static int ContainNullCount(object[] objects)
+            {
+                int cnt = 0;
+                foreach(object obj in objects)
+                {
+                    if (obj == null) { cnt++; }
+                }
+                return cnt;
+            }
         }
 
+        /// <summary>
+        /// negativeNum : Pull (0,'1,2,3' -> '1,2,3',0) / positiveNum : Push ('0,1,2',3 -> 3,'0,1,2')
+        /// </summary>
         public class ConveyorBelt
         {
-            #region ConveyorBelt
+            #region ConveyorBelt     
             /// <summary>
             /// Pull or push items in array 
             /// </summary>
@@ -438,21 +451,19 @@ namespace HRTool
             /// <param name="moveCount">negativeNum : Pull (0,'1,2,3' -> '1,2,3',0) / positiveNum : Push ('0,1,2',3 -> 3,'0,1,2') </param>
             /// <returns></returns>
             public static object[] Conveyor(object[] objs, int moveCount)
-            {
-                Type t = objs.GetType();
+            {                
                 if (objs != null)
                 {
-                    object[] objects = objs;
+                    object[] objects = (object[]) objs.Clone();
                     int turningPoint = objs.Length - Math.Abs(moveCount);
                     if (moveCount > 0)
-                    {
+                    {                        
                         for (int i = 0; i < turningPoint; i++)
                         {
-                            objects[i] = ChangeObj_NullPossiable(objs[i + moveCount]); //당겨진 object
-
+                            objects[i] = ChangeObj_NullPossiable(objs[i + moveCount]); //당겨진 object                            
                             if (i < moveCount)
-                            {
-                                objects[turningPoint + i] = ChangeObj_NullPossiable(objs[i]); //미뤄진 object
+                            {                                
+                                objects[turningPoint + i] = ChangeObj_NullPossiable(objs[i]); //미뤄진 object                                
                             }
                         }
                     }//moveCount만큼 당김.
@@ -476,6 +487,28 @@ namespace HRTool
                     Debug.Log("Null Object Array from ConvayorFunction");
                     return null;
                 }
+            }
+
+            public static int[] Conveyor(int[] items, int moveCount)
+            {
+                object[] objs = new object[items.Length];
+                int[] goals = new int[items.Length];
+                
+                for (int i=0; i< items.Length; i++)
+                {
+                    objs[i] = items[i];
+                }//convert to object[] from int[]
+
+                //Debug.Log(objs[0] + " , " + objs[1] + " , " + objs[2] + " , " + objs[3]);
+                objs = Conveyor(objs, moveCount);
+                //Debug.Log(objs[0] + " , " + objs[1] + " , " + objs[2] + " , " + objs[3]);
+
+                for (int i = 0; i < objs.Length; i++)
+                {
+                    goals[i] = (int) objs[i];
+                }//convert to int[] from object[]
+
+                return goals;
             }
             #endregion
 
