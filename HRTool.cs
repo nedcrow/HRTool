@@ -300,68 +300,6 @@ namespace HRTool
     {
         public static class EditETC
         {
-            #region Swap
-
-            /// <summary>
-            /// (&변수A, &변수B) use in unsafe func.
-            /// </summary>
-            /// <param name="x"></param>
-            /// <param name="y"></param>
-            public static unsafe void Swap(int* x, int* y)
-            {
-                int temp = *x;
-                *x = *y;
-                *y = temp;
-            }
-
-            public static unsafe void Swap(float* x, float* y)
-            {
-                float temp = *x;
-                *x = *y;
-                *y = temp;
-            }
-
-            public static unsafe void Swap(char* x, char* y)
-            {
-                char temp = *x;
-                *x = *y;
-                *y = temp;
-            }
-            #endregion
-
-            #region EqualForColor
-            /// <summary>
-            /// Colored By Color Scripter™
-            /// </summary>
-            /// <param name="source"></param>
-            /// <param name="target"></param>
-            /// <returns></returns>
-            /// 
-            public static bool Equal(this object source, object target)
-            {
-                BinaryFormatter bf1 = new BinaryFormatter();
-                MemoryStream ms1 = new MemoryStream();
-                bf1.Serialize(ms1, source);
-
-                BinaryFormatter bf2 = new BinaryFormatter();
-                MemoryStream ms2 = new MemoryStream();
-                bf1.Serialize(ms2, target);
-
-                byte[] array1 = ms1.ToArray();
-                byte[] array2 = ms2.ToArray();
-
-                if (array1.Length != array2.Length)
-                    return false;
-
-                for (int i = 0; i < array1.Length; i++)
-                {
-                    if (array1[i] != array2[i])
-                        return false;
-                }
-                return true;
-            }
-            #endregion
-
             #region ContainAnB
             /// <summary>
             /// <para>target안에 soruce와 같은 값의 객체가 포함되는지 확인 합니다.</para>
@@ -436,6 +374,130 @@ namespace HRTool
                 }
                 return cnt;
             }
+
+            #region EqualForColor
+            /// <summary>
+            /// Colored By Color Scripter™
+            /// </summary>
+            /// <param name="source"></param>
+            /// <param name="target"></param>
+            /// <returns></returns>
+            /// 
+            public static bool Equal(this object source, object target)
+            {
+                BinaryFormatter bf1 = new BinaryFormatter();
+                MemoryStream ms1 = new MemoryStream();
+                bf1.Serialize(ms1, source);
+
+                BinaryFormatter bf2 = new BinaryFormatter();
+                MemoryStream ms2 = new MemoryStream();
+                bf1.Serialize(ms2, target);
+
+                byte[] array1 = ms1.ToArray();
+                byte[] array2 = ms2.ToArray();
+
+                if (array1.Length != array2.Length)
+                    return false;
+
+                for (int i = 0; i < array1.Length; i++)
+                {
+                    if (array1[i] != array2[i])
+                        return false;
+                }
+                return true;
+            }
+            #endregion
+
+            #region Spiral
+            public static List<Vector2> SpiralPos(int squarMeter)
+            {
+                List<Vector2> posList = new List<Vector2>();
+
+                int[] addX = { 1, 0, -1, 0 };
+                int[] addZ = { 0, -1, 0, 1 };
+                int lastX = 0; //X시작점
+                int lastZ = squarMeter - 1; //Z시작점
+
+                int firstLoop = squarMeter * 2 - 1;
+                int firstTurnPoint = 1; //짝 수 마다 턴 종료하며 방향 턴.
+                int secTurnPoint = 0; //4 단위로 리셋. 한 바퀴 턴.
+                int secLoop = squarMeter;
+                for (int i = 0; i < firstLoop; i++)
+                {
+                    int xPivot = 0;
+                    int zPivot = 0;
+
+                    firstTurnPoint++; //secLoop보다는 나중에
+                    bool evenNum = firstTurnPoint % 2 == 0 ? true : false;
+                    if (evenNum)
+                    {
+                        for (int j = 1; j < secLoop + 1; j++)
+                        {
+                            int addPoint = addX[secTurnPoint];
+                            xPivot = lastX + j * addPoint;
+                            zPivot = lastZ;
+                            xPivot = firstTurnPoint == 2 ? xPivot - 1 : xPivot;
+                            posList.Add(new Vector2(xPivot, zPivot));
+                        }//X, Z위치 기본값 설정.
+
+                        lastX = xPivot; //X시작점 변경.
+                        lastZ = zPivot; //Y시작점 변경.
+                        secLoop--;  //turnPoint가 짝수면 두번째 반복 수 감소.
+                    }
+                    else
+                    {
+                        for (int j = 1; j < secLoop + 1; j++)
+                        {
+                            int addPoint = addZ[secTurnPoint];
+                            xPivot = xPivot = lastX;
+                            zPivot = lastZ + j * addPoint;
+                            //zPivot = addPoint >= 0 ? zPivot : zPivot - 1;
+                            posList.Add(new Vector2(xPivot, zPivot));
+                        }
+
+                        lastX = xPivot; //X시작점 변경.
+                        lastZ = zPivot; //Y시작점 변경.
+                    }
+
+                    if (secTurnPoint >= 3) { secTurnPoint = 0; } else { secTurnPoint++; }
+
+                }
+                //foreach (Vector2 pos in testList)
+                //{
+                //    Debug.Log(pos);
+                //}
+                return posList;
+            }
+            #endregion
+
+            #region Swap
+
+            /// <summary>
+            /// (&변수A, &변수B) use in unsafe func.
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            public static unsafe void Swap(int* x, int* y)
+            {
+                int temp = *x;
+                *x = *y;
+                *y = temp;
+            }
+
+            public static unsafe void Swap(float* x, float* y)
+            {
+                float temp = *x;
+                *x = *y;
+                *y = temp;
+            }
+
+            public static unsafe void Swap(char* x, char* y)
+            {
+                char temp = *x;
+                *x = *y;
+                *y = temp;
+            }
+            #endregion
         }
 
         /// <summary>
