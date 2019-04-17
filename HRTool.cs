@@ -365,7 +365,7 @@ namespace HRTool
             }
             #endregion
 
-            public static int ContainNullCount(object[] objects)
+            public static int ContainedNullCount(object[] objects)
             {
                 int cnt = 0;
                 foreach(object obj in objects)
@@ -374,6 +374,17 @@ namespace HRTool
                 }
                 return cnt;
             }
+
+            public static int ContainedNullCount(bool[] bools)
+            {
+                int cnt = 0;
+                foreach (bool boolean in bools)
+                {
+                    if (boolean == false) { cnt++; }
+                }
+                return cnt;
+            }
+
 
             #region EqualForColor
             /// <summary>
