@@ -365,13 +365,26 @@ namespace HRTool
             }
             #endregion
 
+            #region ContainedNullCount
             public static int ContainedNullCount(object[] objects)
             {
                 int cnt = 0;
-                foreach(object obj in objects)
+                string[] typeTarget = { };
+                if(objects.GetType() == typeTarget.GetType())
                 {
-                    if (obj == null) { cnt++; }
-                }
+                    foreach (object obj in objects)
+                    {
+                        if (obj == null || obj == "") { cnt++; }
+                    }
+                }//for string // 필요시 text 추가
+                else
+                {
+                    foreach (object obj in objects)
+                    {
+                        if (obj == null) { cnt++; }
+                    }
+                }//for object      
+                
                 return cnt;
             }
 
@@ -383,8 +396,25 @@ namespace HRTool
                     if (boolean == false) { cnt++; }
                 }
                 return cnt;
-            }
+            }//for bool
 
+            public static int ContainedNullCount(float[] vals)
+            {
+                int cnt = 0;
+                foreach (float f in vals)
+                {
+                    if (f == 0) { cnt++; }
+                }
+                return cnt;
+            }//for float
+
+            public static int ContainedNullCount(int[] vals)
+            {
+                float[] fs = new float[vals.Length];
+                for (int i = 0; i < vals.Length; i++) { fs[i] = vals[i]; } //fs = vals.Clone();과 같음.
+                return ContainedNullCount(fs);
+            }//for int
+            #endregion
 
             #region EqualForColor
             /// <summary>
@@ -528,15 +558,15 @@ namespace HRTool
                 if (objs != null)
                 {
                     object[] objects = (object[]) objs.Clone();
-                    int turningPoint = objs.Length - Math.Abs(moveCount);
+                    int turningPoint = objs.Length - Math.Abs(moveCount); //변경되는 기준점.
                     if (moveCount > 0)
                     {                        
                         for (int i = 0; i < turningPoint; i++)
                         {
                             objects[i] = ChangeObj_NullPossiable(objs[i + moveCount]); //당겨진 object                            
                             if (i < moveCount)
-                            {                                
-                                objects[turningPoint + i] = ChangeObj_NullPossiable(objs[i]); //미뤄진 object                                
+                            {
+                                objects[turningPoint + i] = ChangeObj_NullPossiable(objs[i]); //밀린 object                                
                             }
                         }
                     }//moveCount만큼 당김.
@@ -545,11 +575,10 @@ namespace HRTool
                         moveCount = moveCount * -1;
                         for (int i = 0; i < turningPoint; i++)
                         {
-                            objects[moveCount + i] = ChangeObj_NullPossiable(objs[i]); //당겨진 object
-
+                            objects[moveCount + i] = ChangeObj_NullPossiable(objs[i]); //밀린 object
                             if (i < moveCount)
                             {
-                                objects[i] = ChangeObj_NullPossiable(objs[turningPoint + i]); //미뤄진 object
+                                objects[i] = ChangeObj_NullPossiable(objs[turningPoint + i]); //당겨진 object
                             }
                         }
                     }//moveCount만큼 밀어냄.            
