@@ -156,7 +156,7 @@ namespace HRTool
         {
             public static GameObject GetChild(string childName, GameObject parentGO)
             {
-                int childCount = parentGO.transform.GetChildCount();
+                int childCount = parentGO.transform.childCount;
                 if (childCount != 0)
                 {
                     for (int i = 0; i < childCount; i++)
@@ -512,37 +512,15 @@ namespace HRTool
             #endregion
 
             #region Swap
-
             /// <summary>
-            /// (&변수A, &변수B) use in unsafe func.
-            /// </summary>
-            /// <param name="x"></param>
-            /// <param name="y"></param>
-            public static unsafe void Swap(int* x, int* y)
-            {
-                int temp = *x;
-                *x = *y;
-                *y = temp;
-            }
-
-            public static unsafe void Swap(float* x, float* y)
-            {
-                float temp = *x;
-                *x = *y;
-                *y = temp;
-            }
-
-            public static unsafe void Swap(char* x, char* y)
-            {
-                char temp = *x;
-                *x = *y;
-                *y = temp;
-            }
+            /// (&변수A, &변수B) use in unsafe func. deprecated func.
+            /// </summary>           
+            static void Swap() { Debug.Log("this is deprecated func."); }
             #endregion
-        }
+            }
 
         /// <summary>
-        /// negativeNum : Pull (0,'1,2,3' -> '1,2,3',0) / positiveNum : Push ('0,1,2',3 -> 3,'0,1,2')
+        /// positiveNum : Pull (0,'1,2,3' -> '1,2,3',0) / negativeNum : Push ('0,1,2',3 -> 3,'0,1,2')
         /// </summary>
         public class ConveyorBelt
         {
@@ -551,7 +529,7 @@ namespace HRTool
             /// Pull or push items in array 
             /// </summary>
             /// <param name="objs"></param>
-            /// <param name="moveCount">negativeNum : Pull (0,'1,2,3' -> '1,2,3',0) / positiveNum : Push ('0,1,2',3 -> 3,'0,1,2') </param>
+            /// <param name="moveCount">positiveNum : Pull (0,'1,2,3' -> '1,2,3',0) / negativeNum : Push ('0,1,2',3 -> 3,'0,1,2') </param>
             /// <returns></returns>
             public static object[] Conveyor(object[] objs, int moveCount)
             {                
