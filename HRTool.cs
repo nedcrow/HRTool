@@ -36,7 +36,6 @@ namespace HRTool
 
                 int sum = (min * 60) + sec;
                 yield return new WaitForSeconds(sum);
-
                 yield return sum;
             }
 
@@ -232,23 +231,6 @@ namespace HRTool
                 return sReturn;
             }
 
-            #endregion
-
-            #region ToUpper
-            /// <summary>
-            /// char 소문자를 대문자로 변환
-            /// </summary>
-            /// <param name="a"></param>
-            /// <returns></returns>
-            public static char ToUpper(char a)
-            {
-                char newa = a;
-                if (a > 96 && a < 123)
-                {
-                    newa = (char)(a - 32);
-                }
-                return newa;
-            }
             #endregion
 
             #region ConvertToStrings
